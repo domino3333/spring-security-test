@@ -8,8 +8,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.zeus.common.security.CustomAccessDeniedHandler;
+import com.zeus.common.security.CustomLoginSuccessHandler;
 
 import jakarta.servlet.DispatcherType;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +50,8 @@ public class SecurityConfig {
 		httpSecurity.formLogin(form -> form
 		        .loginPage("/login")  
 		        .loginProcessingUrl("/login") //로그인 폼 action url, 시큐리티가 낚아챔
+//		        .defaultSuccessUrl("/board/list")
+		        .successHandler(createAuthenticationSuccessHandler())
 		        .permitAll() // 로그인 페이지는 누구나 접근 가능해야 함
 		    );
 
@@ -65,6 +69,10 @@ public class SecurityConfig {
 	@Bean
 	public AccessDeniedHandler createAccessDeniedHandler() {
 		return new CustomAccessDeniedHandler();
+	}
+	@Bean
+	public AuthenticationSuccessHandler createAuthenticationSuccessHandler() {
+	return new CustomLoginSuccessHandler();
 	}
 
 }
