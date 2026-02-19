@@ -3,7 +3,6 @@ package com.zeus.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,6 +11,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 
 import com.zeus.common.security.CustomAccessDeniedHandler;
 
+import jakarta.servlet.DispatcherType;
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration
@@ -26,15 +26,18 @@ public class SecurityConfig {
 		log.info("----------------security config" + httpSecurity);
 
 		// 1. csrf 토큰 비활성화
-		httpSecurity.csrf(csrf -> csrf.disable());
+		//httpSecurity.csrf(csrf -> csrf.disable());
 
 		// 2. 인가 정책
-		httpSecurity.authorizeHttpRequests(auth -> auth.requestMatchers("/board/list").permitAll() // 게시판 목록: 누구나
-				.requestMatchers("/board/register").hasRole("MEMBER") // 게시판 등록: 회원만
-				.requestMatchers("/notice/list").permitAll() // 공지사항 목록: 누구나
-				.requestMatchers("/notice/register").hasRole("ADMIN") // 공지사항 등록: 관리자만
-				.anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
-		);
+		httpSecurity.authorizeHttpRequests(auth -> auth
+                .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+                .requestMatchers("/accessError", "/login", "/css/", "/js/", "/error").permitAll()
+                .requestMatchers("/board/list").permitAll() // 게시판 목록: 누구나
+                .requestMatchers("/board/register").hasRole("MEMBER") // 게시판 등록: 회원만
+                .requestMatchers("/notice/list").permitAll() // 공지사항 목록: 누구나
+                .requestMatchers("/notice/register").hasRole("ADMIN") // 공지사항 등록: 관리자만
+                .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
+        );
 
 		// 3. 접근 거부 시 보여줄 페이지(예외 처리)
 //		httpSecurity.exceptionHandling(exception ->exception.accessDeniedPage("/accessError"));
@@ -43,8 +46,9 @@ public class SecurityConfig {
 		// 4. 기본 로그인 폼은 스프링시큐리티에서 제공하는 것을 쓰겠다
 //		httpSecurity.formLogin(Customizer.withDefaults());
 		httpSecurity.formLogin(form -> form
-		        .loginPage("/login")                // 커스텀 로그인 페이지 URL
-		        .permitAll()                        // 로그인 페이지는 누구나 접근 가능해야 함
+		        .loginPage("/login")  
+		        .loginProcessingUrl("/login") //로그인 폼 action url, 시큐리티가 낚아챔
+		        .permitAll() // 로그인 페이지는 누구나 접근 가능해야 함
 		    );
 
 		return httpSecurity.build();
