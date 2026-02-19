@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,8 +35,8 @@ public class SecurityConfig {
 		);
 
 		// 3. 접근 거부 시 보여줄 페이지(예외 처리)
-		httpSecurity.exceptionHandling(exception ->
-		exception.accessDeniedPage("/accessError"));
+//		httpSecurity.exceptionHandling(exception ->exception.accessDeniedPage("/accessError"));
+		httpSecurity.exceptionHandling(exception -> exception.accessDeniedHandler(createAccessDeniedHandler()));
 
 		// 4. 기본 로그인 폼은 스프링시큐리티에서 제공하는 것을 쓰겠다
 		httpSecurity.formLogin(Customizer.withDefaults());
@@ -48,6 +49,12 @@ public class SecurityConfig {
 		// 지정된 아이디와 패스워드로 로그인이 가능하도록 설정한다.
 		auth.inMemoryAuthentication().withUser("member").password("{noop}1234").roles("MEMBER");
 		auth.inMemoryAuthentication().withUser("admin").password("{noop}1234").roles("ADMIN", "MEMBER");
+	}
+
+	// 3. 접근 거부 시 예외처리를 설정하는 클래스로 이동한다.
+	@Bean
+	public AccessDeniedHandler createAccessDeniedHandler() {
+		return new CustomAccessDeniedHandler();
 	}
 
 }
