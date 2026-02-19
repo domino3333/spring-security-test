@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
+import com.zeus.common.security.CustomAccessDeniedHandler;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration
