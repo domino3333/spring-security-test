@@ -41,7 +41,11 @@ public class SecurityConfig {
 		httpSecurity.exceptionHandling(exception -> exception.accessDeniedHandler(createAccessDeniedHandler()));
 
 		// 4. 기본 로그인 폼은 스프링시큐리티에서 제공하는 것을 쓰겠다
-		httpSecurity.formLogin(Customizer.withDefaults());
+//		httpSecurity.formLogin(Customizer.withDefaults());
+		httpSecurity.formLogin(form -> form
+		        .loginPage("/login")                // 커스텀 로그인 페이지 URL
+		        .permitAll()                        // 로그인 페이지는 누구나 접근 가능해야 함
+		    );
 
 		return httpSecurity.build();
 	}
