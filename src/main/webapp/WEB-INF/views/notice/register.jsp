@@ -11,9 +11,7 @@
 </style>
 </head>
 <body>
-	<h1>list page</h1>
-	<h3>게시글 목록 : 모두가 접근 가능</h3>
-	<a href="/board/register">게시글 등록</a>
-
+	<h1>register page</h1>
+	<h3>공지사항 등록 : 로그인한 관리자만 접근 가능</h3>
 </body>
 </html>

@@ -11,6 +11,8 @@
 </head>
 <body>
 	<h1>register page</h1>
+	<h3>게시글 등록 : 로그인한 회원만 접근 가능</h3>
+	
 
 </body>
 </html>

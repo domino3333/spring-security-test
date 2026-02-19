@@ -11,9 +11,11 @@
 </style>
 </head>
 <body>
-	<h1>list page</h1>
-	<h3>게시글 목록 : 모두가 접근 가능</h3>
-	<a href="/board/register">게시글 등록</a>
+	<h1>home page</h1>
+	<p>서버 날짜: ${serverTime}</p>
+	<a href="/board/list">회원 게시판</a>
+	<br>
+	<a href="/notice/list">공지사항</a>
 
 </body>
 </html>
