@@ -28,7 +28,7 @@ public class SecurityConfig {
 		log.info("----------------security config" + httpSecurity);
 
 		// 1. csrf 토큰 비활성화
-		//httpSecurity.csrf(csrf -> csrf.disable());
+		httpSecurity.csrf(csrf -> csrf.disable());
 
 		// 2. 인가 정책
 		httpSecurity.authorizeHttpRequests(auth -> auth
@@ -54,6 +54,16 @@ public class SecurityConfig {
 		        .successHandler(createAuthenticationSuccessHandler())
 		        .permitAll() // 로그인 페이지는 누구나 접근 가능해야 함
 		    );
+		
+		// 5. 로그아웃 처리
+		// 5. 로그아웃 설정 수정
+	    httpSecurity.logout(logout -> logout
+	        .logoutUrl("/logout")                // 로그아웃을 처리할 URL (기본값: /logout)
+	        .logoutSuccessUrl("/login")   // 로그아웃 성공 시 이동할 페이지
+	        .invalidateHttpSession(true)         // HTTP 세션 무효화 (기본값: true)
+	        .deleteCookies("JSESSIONID", "remember-me") // 로그아웃 시 관련 쿠키 삭제
+	        .permitAll()                         // 로그아웃 요청은 누구나 접근 가능해야 함
+	    );
 
 		return httpSecurity.build();
 	}
