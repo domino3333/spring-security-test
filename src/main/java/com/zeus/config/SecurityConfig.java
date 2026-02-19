@@ -28,7 +28,7 @@ public class SecurityConfig {
 		log.info("----------------security config" + httpSecurity);
 
 		// 1. csrf 토큰 비활성화
-		//httpSecurity.csrf(csrf -> csrf.disable());
+		httpSecurity.csrf(csrf -> csrf.disable());
 
 		// 2. 인가 정책
 		httpSecurity.authorizeHttpRequests(auth -> auth
